@@ -5,6 +5,12 @@ if ! [ -d "/Volumes/RECOVERY" ]; then
 fi
 
 mkdir -p "/Volumes/RECOVERY/passwords"
-rsync -az --delete --exclude ".DS_Store" \
-  "/Users/alyssa/dropbox/Apps/1Password/1Password.agilekeychain" \
-  "/Volumes/RECOVERY/passwords"
+
+container="$(echo $HOME/Library/Containers/*.com.agilebits.onepassword-osx-helper)"
+backup_dir="$container/Data/Library/Backups/"
+
+# Find the most recent backup
+backup="$(find "$backup_dir" | sort -n | tail -n 1)"
+
+# Copy the most recent backup
+cp "$backup" "/Volumes/RECOVERY/passwords"
